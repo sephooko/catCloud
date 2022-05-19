@@ -19,8 +19,8 @@ app.config['MAIL_USE_SSL'] = True
 #     msg.body = "Hello Flask message sent from Flask-Mail"
 #     mail.send(msg)
 #     return "Sent"
-
-
+#
+#
 # @app.route('/s/')
 # def szablon():
 #     return render_template('index.html', user="Stan", email="gucci@sruczi.su")
