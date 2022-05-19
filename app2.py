@@ -41,6 +41,7 @@ def msgSent():
         msg = Message('Hello from the other side!', sender=request.form.get('email'), recipients=['mischief@mailtrap.io'])
         msg.body = request.form.get('msgtext')
         mail.send(msg)
+        #mail.send potrzebuje sendera wiec kod sie w tym miejscu zacina
     elif request.form.get('email') is None:
         flash('Email is required!')
     elif request.form.get('msgtext') is None:
