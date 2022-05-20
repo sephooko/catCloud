@@ -1,4 +1,3 @@
-import email
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
@@ -25,6 +24,14 @@ def index2():
     return render_template("index2.html")
 
 
+@app.route('/msgsent', methods=('GET', 'POST'))
+def msgSent():
+    if request.method == 'POST':
+        msg = Message(subject=request.form.get('subject'), sender=request.form.get('email'), recipients=['mischief@mailtrap.io'])
+        msg.body = request.form.get('msgtext')
+        mail.send(msg)
+    return 'Message sent!'
+
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
 #     if request.method == 'POST':
@@ -39,13 +46,7 @@ def index2():
 #     render_template()
 
 
-@app.route('/msgsent', methods=('GET', 'POST'))
-def msgSent():
-    if request.method == 'POST':
-        msg = Message(subject=request.form.get('subject'), sender=request.form.get('email'), recipients=['mischief@mailtrap.io'])
-        msg.body = request.form.get('msgtext')
-        mail.send(msg)
-    return 'Message sent!'
+
     # elif request.form.get('email') is None:
     #     flash('Email is required!')
     # elif request.form.get('msgtext') is None:
