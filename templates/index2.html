@@ -6,12 +6,14 @@
 </head>
 <body>
    <div class="container">
-       <form action="/msgsent" method="post">
-           <label for="email">Your email adress: </label><br>
-           <input type="text" id="email" name="email" value="{{ request.form.email }}"><br>
-           <label for="msgtext">Message content: </label><br>
-           <textarea type="text" id="msgtext" name="msgtext">{{ request.form.msgtext }}</textarea><br>
-           <input type="submit" value="Submit" >
+       <form action="{{ url_for('msgSent') }}" method="post">
+           <label for="email">Email</label><br>
+           <input type="text" id="email" name="email" value="{{ request.form.email }}" placeholder='Enter your email adress' required><br>
+           <label for="subject">Subject</label><br>
+           <input type="text" id="subject" name="subject" value="{{ request.form.subject }}" placeholder='Subject of the message'><br>
+           <label for="msgtext">Message</label><br>
+           <textarea type="text" id="msgtext" name="msgtext" placeholder='Content of your email' required>{{ request.form.msgtext }}</textarea><br>
+           <input type="submit" value="Submit">
        </form>
    </div>
 </body>
