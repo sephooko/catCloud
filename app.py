@@ -1,9 +1,22 @@
-from flask import Flask, abort, make_response
-from flask import render_template
+from flask import Flask, abort, make_response, request, redirect, render_template, url_for
 from flask_mail import Mail, Message
-from flask import url_for
+import os
+
 
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='static')
+
+
+app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '6b4e162fafe974'
+app.config['MAIL_PASSWORD'] = 'bbca71a7fc7f07'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEFAULT_SUBJECT'] = '<Hello from the other side!>'
+secretKey = os.urandom(16)
+app.config['SECRET_KEY'] = 'secretKey'
+
+mail = Mail(app)
 
 
 @app.route('/index')
@@ -25,6 +38,15 @@ def contact():
 @app.route('/about')
 def about():
     return render_template("about.html")
+
+
+@app.route('/msgsent', methods=('GET', 'POST'))
+def msgSent():
+    if request.method == 'POST':
+        msg = Message(subject=request.form.get('subject'), sender=request.form.get('email'), recipients=['mischief@mailtrap.io'])
+        msg.body = request.form.get('msgtext')
+        mail.send(msg)
+    return 'Message sent!'
 
 
 @app.route('/error_denied')
