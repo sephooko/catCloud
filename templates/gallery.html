@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-sm-4">
             <br>zawartość komórki<br>
-            <a href="https://github.com/sephooko/catCloud/blob/5a415eb0876980e7f36674800266cd2a5c0b1f05/static/images/mischief_cute_1.jpg" data-toggle="lightbox" data-gallery="my-gallery">
+            <a href="https://github.com/sephooko/catCloud/blob/a9ac684cbd385959ec57fc53d6f9ddf76c542062/static/images/mischief_cute_1.jpg" data-toggle="lightbox" data-gallery="my-gallery">
                 <img src="images/mischief_cute_1.jpg" class="img-fluid">
             </a>
         </div>
@@ -65,16 +65,19 @@
     </div>
 </div>
 <script>
+    // $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+    //     event.preventDefault();
+    //     $(this).ekkolightbox({
+    //         loadingMessage: "Loading…",
+    //         showArrows: true,
+    //         leftArrow: "<<<",
+    //         rightArrow: ">>>"
+    //     });
+    // });
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-    $(this).ekkolightbox({
-        loadingMessage: "Loading…",
-        showArrows: true,
-        leftArrow: "<<<",
-        rightArrow: ">>>"
-    });
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
 </script>
 {% endblock %}
 <!--{% block content %}-->
