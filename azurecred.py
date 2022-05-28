@@ -1,0 +1,5 @@
+AZDBSERVER = 'catbase.database.windows.net'
+AZDBNAME = 'catbase'
+AZDBUSER = 'catadmin'
+AZDBPW = 'Catpassword123'
+AZDBDRIVER = '{ODBC Driver 18 for SQL Server}'

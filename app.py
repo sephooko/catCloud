@@ -1,10 +1,10 @@
 from flask import Flask, abort, make_response, request, redirect, render_template, url_for
+import pypyodbc
+import azurecred
 from flask_mail import Mail, Message
 import os
 
-
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='static')
-
 
 app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 2525
@@ -17,6 +17,48 @@ secretKey = os.urandom(16)
 app.config['SECRET_KEY'] = 'secretKey'
 
 mail = Mail(app)
+
+
+class AzureDB:
+    dsn: str = 'DRIVER=' + azurecred.AZDBDRIVER + ';SERVER=' + azurecred.AZDBSERVER + ';PORT=1433;DATABASE=' + azurecred.AZDBNAME + '; UID=' + azurecred.AZDBUSER + ';PWD=' + azurecred.AZDBPW
+
+    def __init__(self):
+        self.conn = pypyodbc.connect(self.dsn)
+        self.cursor = self.conn.cursor()
+
+    def finalize(self):
+        if self.conn:
+            self.conn.close()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.finalize()
+
+    def __enter__(self):
+        return self
+
+    def azureGetData(self):
+        try:
+            self.cursor.execute("SELECT name, text from data")
+            data = self.cursor.fetchall()
+            return data
+        except pypyodbc.DatabaseError as exception:
+            print('Failed to execute query')
+            print(exception)
+            exit(1)
+
+    def azureAddData(self):
+        # cname: str = request.form.get('cname')
+        # comment: str = request.form.get('comment')
+        self.cursor.execute("""INSERT INTO data (name, text) VALUES (?,?)""", (request.form.get('cname'), request.form.get('comment')))
+        self.conn.commit()
+
+
+@app.route('/sand')
+def sent():
+    AzureDB().azureAddData()
+    with AzureDB() as a:
+        data = a.azureGetData()
+    return render_template("result.html", data=data)
 
 
 @app.route('/index')
@@ -43,7 +85,8 @@ def about():
 @app.route('/msgsent', methods=('GET', 'POST'))
 def msgSent():
     if request.method == 'POST':
-        msg = Message(subject=request.form.get('subject'), sender=request.form.get('email'), recipients=['mischief@mailtrap.io'])
+        msg = Message(subject=request.form.get('subject'), sender=request.form.get('email'),
+                      recipients=['mischief@mailtrap.io'])
         msg.body = request.form.get('msgtext')
         mail.send(msg)
     return 'Message sent!'
