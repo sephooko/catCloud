@@ -9,7 +9,7 @@ import secrets
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='static')
 
 app.secret_key = secrets.token_hex(16)
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+# os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 github_blueprint = make_github_blueprint(
     client_id="36ad35ed87c8d5622d02",
     client_secret="165d88c658b57c0a00677c986f3b38f6f5287227",
