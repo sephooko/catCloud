@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'CatCloud'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D0FAA7ECEC2A493D9BB733977054BE3C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6FD15C59A6FD42DDB09917F371AFBA23 }}
