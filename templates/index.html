@@ -2,10 +2,7 @@
 
 {% block title %} Index {% endblock %}
 {% set active_page = "index" -%}
-
-<h1> Witaj {{ user }}! Czy chcesz zobaczyć tą brzydką stronę? </h1>
-    <p> Twój e-mail to {{ email }} i właśnie trafia do spamu </p>{% block body %}
-
+{% block body %}
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
