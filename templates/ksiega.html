@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container">
-       <form action="{{ url_for('ksiega') }}">
+       <form action="{{ url_for('ksiega') }}" method="post">
            <div class="form-group">
                <label for="cname">Name</label><br>
                <input class="form-control" type="text" id="cname" name="cname" value="{{ request.form.cname }}" placeholder='Enter your nickname' required><br>
@@ -22,7 +22,7 @@
         </div>
         {% for result in data %}
             <div class="form-control-static">
-                <p>{{result.name}} napisał {{result.text}} w dniu {{result.date}} </p>
+                <p>{{result.name}} napisał {{result.text}} </p>
             </div>
         {% else %}
             <div class="form-control-static">

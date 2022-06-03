@@ -1,4 +1,5 @@
 from flask import Flask, abort, make_response, request, redirect, render_template, url_for
+from datetime import datetime
 import pypyodbc
 import azurecred
 from flask_mail import Mail, Message
@@ -48,7 +49,7 @@ class AzureDB:
 
     def azureGetData(self):
         try:
-            self.cursor.execute("SELECT name, text, date from data")
+            self.cursor.execute("SELECT name, text from data")
             data = self.cursor.fetchall()
             return data
         except pypyodbc.DatabaseError as exception:
@@ -57,7 +58,7 @@ class AzureDB:
             exit(1)
 
     def azureAddData(self):
-        self.cursor.execute("""INSERT INTO data (name, text, date) VALUES (?,?,?)""", (request.form.get('cname'), request.form.get('comment')))
+        self.cursor.execute("""INSERT INTO data (name, text) VALUES (?,?)""", (request.form.get('cname'), request.form.get('comment')))
         self.conn.commit()
 
 
