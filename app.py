@@ -1,7 +1,4 @@
 from flask import Flask, abort, make_response, request, redirect, render_template, url_for
-from datetime import datetime
-# import pypyodbc
-# import azurecred
 from flask_mail import Mail, Message
 import os
 from flask_dance.contrib.github import make_github_blueprint, github
