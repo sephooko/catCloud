@@ -1,7 +1,7 @@
 from flask import Flask, abort, make_response, request, redirect, render_template, url_for
 from datetime import datetime
-import pypyodbc
-import azurecred
+# import pypyodbc
+# import azurecred
 from flask_mail import Mail, Message
 import os
 from flask_dance.contrib.github import make_github_blueprint, github
@@ -9,13 +9,13 @@ import secrets
 
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='static')
 
-# app.secret_key = secrets.token_hex(16)
-# os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-# github_blueprint = make_github_blueprint(
-#     client_id="36ad35ed87c8d5622d02",
-#     client_secret="165d88c658b57c0a00677c986f3b38f6f5287227",
-# )
-# app.register_blueprint(github_blueprint, url_prefix='/login')
+app.secret_key = secrets.token_hex(16)
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+github_blueprint = make_github_blueprint(
+    client_id="36ad35ed87c8d5622d02",
+    client_secret="165d88c658b57c0a00677c986f3b38f6f5287227",
+)
+app.register_blueprint(github_blueprint, url_prefix='/login')
 
 app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 2525
@@ -30,64 +30,64 @@ app.config['SECRET_KEY'] = 'secretKey'
 mail = Mail(app)
 
 
-class AzureDB:
-    dsn: str = 'DRIVER=' + azurecred.AZDBDRIVER + ';SERVER=' + azurecred.AZDBSERVER + ';PORT=1433;DATABASE=' + azurecred.AZDBNAME + '; UID=' + azurecred.AZDBUSER + ';PWD=' + azurecred.AZDBPW
-
-    def __init__(self):
-        self.conn = pypyodbc.connect(self.dsn)
-        self.cursor = self.conn.cursor()
-
-    def finalize(self):
-        if self.conn:
-            self.conn.close()
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.finalize()
-
-    def __enter__(self):
-        return self
-
-    def azureGetData(self):
-        try:
-            self.cursor.execute("SELECT name, text from data")
-            data = self.cursor.fetchall()
-            return data
-        except pypyodbc.DatabaseError as exception:
-            print('Failed to execute query')
-            print(exception)
-            exit(1)
-
-    def azureAddData(self):
-        self.cursor.execute("""INSERT INTO data (name, text) VALUES (?,?)""", (request.form.get('cname'), request.form.get('comment')))
-        self.conn.commit()
-
-
-@app.route('/ksiegagosci', methods=['GET','POST'])
-def ksiega():
-    with AzureDB() as a:
-        if request.method =='POST':
-            AzureDB().azureAddData()
-        data = a.azureGetData()
-    return render_template("ksiega.html", data=data)
+# class AzureDB:
+#     dsn: str = 'DRIVER=' + azurecred.AZDBDRIVER + ';SERVER=' + azurecred.AZDBSERVER + ';PORT=1433;DATABASE=' + azurecred.AZDBNAME + '; UID=' + azurecred.AZDBUSER + ';PWD=' + azurecred.AZDBPW
+#
+#     def __init__(self):
+#         self.conn = pypyodbc.connect(self.dsn)
+#         self.cursor = self.conn.cursor()
+#
+#     def finalize(self):
+#         if self.conn:
+#             self.conn.close()
+#
+#     def __exit__(self, exc_type, exc_val, exc_tb):
+#         self.finalize()
+#
+#     def __enter__(self):
+#         return self
+#
+#     def azureGetData(self):
+#         try:
+#             self.cursor.execute("SELECT name, text from data")
+#             data = self.cursor.fetchall()
+#             return data
+#         except pypyodbc.DatabaseError as exception:
+#             print('Failed to execute query')
+#             print(exception)
+#             exit(1)
+#
+#     def azureAddData(self):
+#         self.cursor.execute("""INSERT INTO data (name, text) VALUES (?,?)""", (request.form.get('cname'), request.form.get('comment')))
+#         self.conn.commit()
 
 
-@app.route('/index')
-@app.route('/')
-def index():
-    return render_template("index.html")
+# @app.route('/ksiegagosci', methods=['GET','POST'])
+# def ksiega():
+#     with AzureDB() as a:
+#         if request.method =='POST':
+#             AzureDB().azureAddData()
+#         data = a.azureGetData()
+#     return render_template("ksiega.html", data=data)
 
 
 # @app.route('/index')
 # @app.route('/')
 # def index():
-#     if not github.authorized:
-#         return redirect(url_for('github.login'))
-#     else:
-#         account_info = github.get('/user')
-#     if account_info.ok:
-#         account_info_json = account_info.json()
-#         return render_template("index.html") + '<h1>Your Github name is {}</h1>'.format(account_info_json['login'])
-#     return '<h1>Request failed!</h1>'
+#     return render_template("index.html")
+
+
+@app.route('/index')
+@app.route('/')
+def index():
+    if not github.authorized:
+        return redirect(url_for('github.login'))
+    else:
+        account_info = github.get('/user')
+    if account_info.ok:
+        account_info_json = account_info.json()
+        return render_template("index.html") + '<h1>Your Github name is {}</h1>'.format(account_info_json['login'])
+    return '<h1>Request failed!</h1>'
 
 
 @app.route('/gallery')
