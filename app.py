@@ -9,13 +9,13 @@ import secrets
 
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='static')
 
-app.secret_key = secrets.token_hex(16)
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-github_blueprint = make_github_blueprint(
-    client_id="36ad35ed87c8d5622d02",
-    client_secret="165d88c658b57c0a00677c986f3b38f6f5287227",
-)
-app.register_blueprint(github_blueprint, url_prefix='/login')
+# app.secret_key = secrets.token_hex(16)
+# os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+# github_blueprint = make_github_blueprint(
+#     client_id="36ad35ed87c8d5622d02",
+#     client_secret="165d88c658b57c0a00677c986f3b38f6f5287227",
+# )
+# app.register_blueprint(github_blueprint, url_prefix='/login')
 
 app.config['MAIL_SERVER'] = 'smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 2525
@@ -71,23 +71,23 @@ mail = Mail(app)
 #     return render_template("ksiega.html", data=data)
 
 
-# @app.route('/index')
-# @app.route('/')
-# def index():
-#     return render_template("index.html")
-
-
 @app.route('/index')
 @app.route('/')
 def index():
-    if not github.authorized:
-        return redirect(url_for('github.login'))
-    else:
-        account_info = github.get('/user')
-    if account_info.ok:
-        account_info_json = account_info.json()
-        return render_template("index.html") + '<h1>Your Github name is {}</h1>'.format(account_info_json['login'])
-    return '<h1>Request failed!</h1>'
+    return render_template("index.html")
+
+
+# @app.route('/index')
+# @app.route('/')
+# def index():
+#     if not github.authorized:
+#         return redirect(url_for('github.login'))
+#     else:
+#         account_info = github.get('/user')
+#     if account_info.ok:
+#         account_info_json = account_info.json()
+#         return render_template("index.html") + '<h1>Your Github name is {}</h1>'.format(account_info_json['login'])
+#     return '<h1>Request failed!</h1>'
 
 
 @app.route('/gallery')
