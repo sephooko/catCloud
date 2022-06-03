@@ -3,7 +3,7 @@
  {'url': 'about', 'display_name': 'About Me'},
  {'url': 'gallery', 'display_name': 'Gallery'},
  {'url': 'contact', 'display_name': 'Contact'},
- {'url': 'sent', 'display_name': 'Comments'}
+ {'url': 'ksiega', 'display_name': 'Księga Gości'}
 ] -%}
 {% set active_page = active_page|default('index') -%}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -12,7 +12,7 @@
  <ul class="navbar-nav">
  {% for item in navigation %}
  <li class="nav-item">
- <a class="nav-link {% if item['url'] == active_page %} active {% endif %}" href="{{url_for(item['url']) }}">{{ item['display_name'] }}</a>
+ <a class="nav-link{% if item['url'] == active_page %} active {% endif %}" href="{{url_for(item['url']) }}">{{ item['display_name'] }}</a>
  </li>
  {% endfor %}
  </ul>
